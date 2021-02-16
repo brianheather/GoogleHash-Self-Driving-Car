@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.lang.Math;
+import java.util.Arrays;
 
 public class MainChrono {
 
@@ -18,7 +19,7 @@ public class MainChrono {
 	static ArrayList<Integer> priority2Sorted = new ArrayList<>();
 	// Priority2, can never get there in time
 	// Ignore is not needed since it's ignored
-	static CarChrono[] vehicles = new CarChrono[3];
+	static CarChrono[] vehicles;
 
 	public static void main(String[] args) {
 		readFile();
@@ -30,15 +31,13 @@ public class MainChrono {
 		addRoutes();
 		
 		for(CarChrono elemV: vehicles) {
-			System.out.println("YOYOYO");
+			System.out.println("\nYOYOYO");
 			ArrayList<Route> data = elemV.getRoutes();
 			for(Route elemR: data) {
 				System.out.print(elemR.getPos() + " ");
-			}
-			
+			}			
 		}
-		
-		System.out.println("Done");
+		System.out.println("\nDone");
 	}
 
 	public static void addRoutes() {
@@ -51,20 +50,38 @@ public class MainChrono {
 				System.out.println(elemR);
 				for(int i = 0; i < vehicles.length; i++) {
 					System.out.println("c");
-					vehicles[i].insertRoute(elemR); //vehicles[i] is null
 					//null.add(x) cannot work need to do vehicles[i] = add(x) somehow
 					//System.out.println(asdf);
-					if (true) {
-						System.out.println("Break");
-						
+					if (vehicles[i].insertRoute(elemR)) {
+						System.out.println("Break");	
+						break;
 					}
 					System.out.println("d");
 				}
 			}
 		}
 		
+		System.out.println("\n\nA 2");
+		for(Integer elemI: priority2Sorted) {
+			System.out.println("a");
+			ArrayList<Route> data = priority2Unsorted.get(elemI);
+			for(Route elemR: data) {
+				System.out.println("b");
+				System.out.println(elemR);
+				for(int i = 0; i < vehicles.length; i++) {
+					System.out.println("c");
+					//null.add(x) cannot work need to do vehicles[i] = add(x) somehow
+					//System.out.println(asdf);
+					if (vehicles[i].insertRoute(elemR)) {
+						System.out.print(">>>>Break    ");
+						System.out.println(elemR.getPos());
+						break;
+					}
+					System.out.println("d");
+				}
+			}
+		}
 		System.out.println("B");
-		System.out.println(vehicles[0]);
 		System.out.println("Printed");
 	}
 	
@@ -83,8 +100,12 @@ public class MainChrono {
 			String dataT = info.nextLine();
 			String[] data = dataT.split(" ");
 
-			//vehicles = new CarChrono[Integer.parseInt(data[2])];
-
+			vehicles = new CarChrono[Integer.parseInt(data[2])];
+			for(int i = 0; i < vehicles.length; i++) {
+				vehicles[i] = new CarChrono();
+			}
+			//Arrays.fill(vehicles, new CarChrono());
+			
 			int counter = 0;
 			while (info.hasNextLine()) {
 				dataT = info.nextLine();
