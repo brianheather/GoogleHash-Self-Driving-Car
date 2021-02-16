@@ -1,19 +1,12 @@
-/**
- * Variable range removed, might add back to speed up searching for start and end journey times
- * Combined checkRoute and addRoute -->method: insertRoute
- */
 package application;
 
 import java.util.ArrayList;
-//import java.util.Arrays;
 
 public class CarChrono {
 
-	//private ArrayList<Integer[]> range = new ArrayList<>();
 	private ArrayList<Route> deRoute = new ArrayList<>();
 
 	public CarChrono() {
-		//range.add(new Integer[] { 0 });
 		deRoute.add(new Route(0, 0, 0, 0, 0, 0, 0));
 	}
 
@@ -22,7 +15,6 @@ public class CarChrono {
 		Route routeA = deRoute.get(deRoute.size() - 1);
 		if (goodTravelTime(routeA, routeB)) {
 			deRoute.add(routeB);
-			//range.add(new Integer[] { routeB.getStartT(), routeB.getEndT() });
 			return true;
 		}
 		return false;
@@ -90,12 +82,8 @@ public class CarChrono {
 		int num = -1;
 		
 		int dist = bt2-distance-bt1;
-		//System.out.println(dist+10);
-		///System.out.println("BA");
 		for (int i = 0; i < deRoute.size(); i++) {
 			int at2 = deRoute.get(i).getEndT();
-			//System.out.println(at2);
-			//System.out.println(bt1+dist + "\n");
 			if (at2 <= bt1 + dist) { //dist is added so "outside time" is not needed, look down appendix a
 				if (i + 1 == deRoute.size()) {
 					num = i;
@@ -108,7 +96,6 @@ public class CarChrono {
 				}
 			}
 		}
-		///System.out.println("BE");
 		return num;
 	}
 
@@ -120,54 +107,4 @@ public class CarChrono {
 	public ArrayList<Route> getRoutes() {
 		return deRoute;
 	}
-
-	/*
-	 * Not needed
-	 * 
-	 * public boolean insertRouteDeadAAA(Route routeB) { ///System.out.println("AA");
-	 * int startT = routeB.getStartT(); int endT = routeB.getEndT();
-	 * 
-	 * int loc = findGoodTRoute(startT, endT);
-	 * 
-	 * ///System.out.println(loc); if (loc != -1) {
-	 * ///System.out.println("SHOULD BE ADDING"); Route routeA = deRoute.get(loc);
-	 * 
-	 * ///System.out.println("AB"); if (goodTravelTime(routeA, routeB)) { // Priority2
-	 * doesn't work by design if (loc + 1 == deRoute.size()) { deRoute.add(routeB);
-	 * ///System.out.println("AC, ADDED"); return true; } else { Route routeC =
-	 * deRoute.get(loc + 1); if (goodTravelTime(routeB, routeC)) { deRoute.add(loc +
-	 * 1, routeB); return true; } return false; } } else { return false; } } else {
-	 * ///System.out.println("ASDFASDF-1"); return false; } }
-	 * 
-	 * public void addRouteVoid(Route route) { int num =
-	 * findGoodTRoute(route.getStartT(), route.getEndT()); deRoute.add(num+1,
-	 * route);
-	 * 
-	 * /* for (int i = 0; i < range.size(); i++) { if (range.get(i)[1] >
-	 * route.getStartT()) { range.add(i+1, new Integer[]
-	 * {route.getStartT(),route.getEndT()}); break; } } // * / }
-	 * 
-	 * public void addRouteEnd(Route route) { Route lastPos =
-	 * deRoute.get(deRoute.size() - 1); int[] endxy = lastPos.getEndL();
-	 * 
-	 * int[] startxy = route.getStartL();
-	 * 
-	 * if (Arrays.equals(endxy, startxy)) {
-	 * 
-	 * } deRoute.add(route); }
-	 * 
-	 * 
-	 * //Not done public boolean possibleBefore(Route prevPos) { return true; }
-	 */
 }
-
-/**
- * Appendix A
- * Example two routes: 
- * aT = [0, 9], aDist = 5
- * bT = [0, 9], aDist = 5
- * (similar to example)
- * 
- * route A takes space from 0, 4
- * and route B can take space 5, 9
- */
