@@ -25,7 +25,7 @@ public class MainChrono {
 
 	public static void main(String[] args) {
 		readFile();
-		sortDeMaps(); // Big to small or small to big
+		sortDeMaps(); // chronological order
 		// printerRoutes();
 
 		addRoutes();
@@ -34,30 +34,37 @@ public class MainChrono {
 		System.out.println("\nDone");
 	}
 
-	public static void writeToFile() {
-		try {
+	public static void writeToFile() 
+	{
+		try 
+		{
 			File outputFile = new File("OUTPUT.txt");
-			if (outputFile.createNewFile()) {
+			if (outputFile.createNewFile()) 
+			{
 				System.out.println("New file was created");
-			} else {
+			} 
+			else 
+			{
 				System.out.println("File already existed, the submission have been overwritten.");
 			}
 
 			PrintWriter outputWriter = new PrintWriter(outputFile);
 			
-			///
-			for (CarChrono elemV : vehicles) {
+			for (CarChrono elemV : vehicles) 
+			{
 				ArrayList<Route> data = elemV.getRoutes();
 				data.remove(0);
 				outputWriter.print(data.size());
-				for (Route elemR : data) {
+				for (Route elemR : data) 
+				{
 					outputWriter.print(" " + elemR.getPos());
 				}
 				outputWriter.print("\n");
 			}
-			
 			outputWriter.close();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			System.out.println("Error occured during printing the solution");
 			e.printStackTrace();
 		}
@@ -65,46 +72,27 @@ public class MainChrono {
 
 	public static void addRoutes() {
 
-		/// System.out.println("A");
 		for (Integer elemI : priority1Sorted) {
-			/// System.out.println("a");
 			ArrayList<Route> data = priority1Unsorted.get(elemI);
 			for (Route elemR : data) {
-				/// System.out.println("b");
-				/// System.out.println(elemR);
 				for (int i = 0; i < vehicles.length; i++) {
-					/// System.out.println("c");
 					if (vehicles[i].appendRoute(elemR)) {
-						/// System.out.println("Break");
 						break;
 					}
-					/// System.out.println("d");
 				}
 			}
 		}
 
-		/// System.out.println("\n\nA 2");
 		for (Integer elemI : priority2Sorted) {
-			/// System.out.println("a");
 			ArrayList<Route> data = priority2Unsorted.get(elemI);
 			for (Route elemR : data) {
-				/// System.out.println("b");
-				/// System.out.println(elemR);
 				for (int i = 0; i < vehicles.length; i++) {
-					/// System.out.println("c");
-					// null.add(x) cannot work need to do vehicles[i] = add(x) somehow
-					// System.out.println(asdf);
 					if (vehicles[i].insertRoute(elemR)) {
-						/// System.out.print(">>>>Break ");
-						/// System.out.println(elemR.getPos());
 						break;
 					}
-					/// System.out.println("d");
 				}
 			}
 		}
-		/// System.out.println("B");
-		/// System.out.println("Printed");
 	}
 
 	public static int calDist(int x1, int y1, int x2, int y2) {
@@ -115,10 +103,10 @@ public class MainChrono {
 		Scanner info = null;
 		try {
 			File file;
-			file = new File("e_high_bonus.IN");
-			//file = new File("d_metropolis.IN");
-			//file = new File("c_no_hurry.IN");
-			//file = new File("b_should_be_easy.IN");
+			file = new File("e_high_bonus.IN"); 		//50234 points
+			//file = new File("d_metropolis.IN"); 		//129988 points
+			//file = new File("c_no_hurry.IN");			//93095 points
+			//file = new File("b_should_be_easy.IN"); 	//16139 points
 			//file = new File("a_example.IN");
 			info = new Scanner(file);
 
@@ -129,8 +117,6 @@ public class MainChrono {
 			for (int i = 0; i < vehicles.length; i++) {
 				vehicles[i] = new CarChrono();
 			}
-
-			// Arrays.fill(vehicles, new CarChrono());
 
 			int counter = 0;
 			while (info.hasNextLine()) {
@@ -146,7 +132,6 @@ public class MainChrono {
 
 				int dist = calDist(x1, y1, x2, y2);
 
-				// Can optimise with not
 				if (x1 + y1 <= t1 && dist <= t2 - t1) {
 					if (priority1Unsorted.containsKey(t1)) {
 						priority1Unsorted.get(t1).add(new Route(x1, y1, x2, y2, t1, t1 + dist, counter));
@@ -177,11 +162,9 @@ public class MainChrono {
 
 	public static void sortDeMaps() {
 		for (Integer elem : priority1Unsorted.keySet()) {
-
 			priority1Sorted.add(elem);
 		}
 		Collections.sort(priority1Sorted);
-
 		for (Integer elem : priority2Unsorted.keySet()) {
 			priority2Sorted.add(elem);
 		}
@@ -217,5 +200,4 @@ public class MainChrono {
 			System.out.println("=============");
 		}
 	}
-
 }
