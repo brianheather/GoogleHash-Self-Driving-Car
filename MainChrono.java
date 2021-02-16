@@ -3,11 +3,13 @@ package application;
 import java.util.HashMap;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.lang.Math;
-import java.util.Arrays;
+//import java.util.Arrays;
 
 public class MainChrono {
 
@@ -24,67 +26,87 @@ public class MainChrono {
 	public static void main(String[] args) {
 		readFile();
 		sortDeMaps(); // Big to small or small to big
-		//printerRoutes();
+		// printerRoutes();
 
-		System.out.println(vehicles[0]);
-		
 		addRoutes();
-		
-		for(CarChrono elemV: vehicles) {
-			System.out.println("\nYOYOYO");
-			ArrayList<Route> data = elemV.getRoutes();
-			for(Route elemR: data) {
-				System.out.print(elemR.getPos() + " ");
-			}			
-		}
+
+		writeToFile();
 		System.out.println("\nDone");
 	}
 
-	public static void addRoutes() {
-		System.out.println("A");
-		for(Integer elemI: priority1Sorted) {
-			System.out.println("a");
-			ArrayList<Route> data = priority1Unsorted.get(elemI);
-			for(Route elemR: data) {
-				System.out.println("b");
-				System.out.println(elemR);
-				for(int i = 0; i < vehicles.length; i++) {
-					System.out.println("c");
-					//null.add(x) cannot work need to do vehicles[i] = add(x) somehow
-					//System.out.println(asdf);
-					if (vehicles[i].insertRoute(elemR)) {
-						System.out.println("Break");	
-						break;
-					}
-					System.out.println("d");
-				}
+	public static void writeToFile() {
+		try {
+			File outputFile = new File("OUTPUT.txt");
+			if (outputFile.createNewFile()) {
+				System.out.println("New file was created");
+			} else {
+				System.out.println("File already existed, the submission have been overwritten.");
 			}
-		}
-		
-		System.out.println("\n\nA 2");
-		for(Integer elemI: priority2Sorted) {
-			System.out.println("a");
-			ArrayList<Route> data = priority2Unsorted.get(elemI);
-			for(Route elemR: data) {
-				System.out.println("b");
-				System.out.println(elemR);
-				for(int i = 0; i < vehicles.length; i++) {
-					System.out.println("c");
-					//null.add(x) cannot work need to do vehicles[i] = add(x) somehow
-					//System.out.println(asdf);
-					if (vehicles[i].insertRoute(elemR)) {
-						System.out.print(">>>>Break    ");
-						System.out.println(elemR.getPos());
-						break;
-					}
-					System.out.println("d");
+
+			PrintWriter outputWriter = new PrintWriter(outputFile);
+			
+			///
+			for (CarChrono elemV : vehicles) {
+				ArrayList<Route> data = elemV.getRoutes();
+				data.remove(0);
+				outputWriter.print(data.size());
+				for (Route elemR : data) {
+					outputWriter.print(" " + elemR.getPos());
 				}
+				outputWriter.print("\n");
 			}
+			
+			outputWriter.close();
+		} catch (IOException e) {
+			System.out.println("Error occured during printing the solution");
+			e.printStackTrace();
 		}
-		System.out.println("B");
-		System.out.println("Printed");
 	}
-	
+
+	public static void addRoutes() {
+
+		/// System.out.println("A");
+		for (Integer elemI : priority1Sorted) {
+			/// System.out.println("a");
+			ArrayList<Route> data = priority1Unsorted.get(elemI);
+			for (Route elemR : data) {
+				/// System.out.println("b");
+				/// System.out.println(elemR);
+				for (int i = 0; i < vehicles.length; i++) {
+					/// System.out.println("c");
+					if (vehicles[i].appendRoute(elemR)) {
+						/// System.out.println("Break");
+						break;
+					}
+					/// System.out.println("d");
+				}
+			}
+		}
+
+		/// System.out.println("\n\nA 2");
+		for (Integer elemI : priority2Sorted) {
+			/// System.out.println("a");
+			ArrayList<Route> data = priority2Unsorted.get(elemI);
+			for (Route elemR : data) {
+				/// System.out.println("b");
+				/// System.out.println(elemR);
+				for (int i = 0; i < vehicles.length; i++) {
+					/// System.out.println("c");
+					// null.add(x) cannot work need to do vehicles[i] = add(x) somehow
+					// System.out.println(asdf);
+					if (vehicles[i].insertRoute(elemR)) {
+						/// System.out.print(">>>>Break ");
+						/// System.out.println(elemR.getPos());
+						break;
+					}
+					/// System.out.println("d");
+				}
+			}
+		}
+		/// System.out.println("B");
+		/// System.out.println("Printed");
+	}
+
 	public static int calDist(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y2 - y1);
 	}
@@ -93,19 +115,23 @@ public class MainChrono {
 		Scanner info = null;
 		try {
 			File file;
-			file = new File("b_should_be_easy.IN");
-			file = new File("a_example.IN");
+			file = new File("e_high_bonus.IN");
+			//file = new File("d_metropolis.IN");
+			//file = new File("c_no_hurry.IN");
+			//file = new File("b_should_be_easy.IN");
+			//file = new File("a_example.IN");
 			info = new Scanner(file);
 
 			String dataT = info.nextLine();
 			String[] data = dataT.split(" ");
 
 			vehicles = new CarChrono[Integer.parseInt(data[2])];
-			for(int i = 0; i < vehicles.length; i++) {
+			for (int i = 0; i < vehicles.length; i++) {
 				vehicles[i] = new CarChrono();
 			}
-			//Arrays.fill(vehicles, new CarChrono());
-			
+
+			// Arrays.fill(vehicles, new CarChrono());
+
 			int counter = 0;
 			while (info.hasNextLine()) {
 				dataT = info.nextLine();
@@ -131,10 +157,10 @@ public class MainChrono {
 					}
 				} else if (dist <= t2 - t1) {
 					if (priority2Unsorted.containsKey(t1)) {
-						priority2Unsorted.get(t1).add(new Route(x1, y1, x2, y2, t1, t2, counter));
+						priority2Unsorted.get(t1).add(new Route(x1, y1, x2, y2, t1, t2, dist, counter));
 					} else {
 						ArrayList<Route> temp = new ArrayList<>();
-						temp.add(new Route(x1, y1, x2, y2, t1, t2, counter));
+						temp.add(new Route(x1, y1, x2, y2, t1, t2, dist, counter));
 						priority2Unsorted.put(t1, temp);
 					}
 				} else {
@@ -151,11 +177,11 @@ public class MainChrono {
 
 	public static void sortDeMaps() {
 		for (Integer elem : priority1Unsorted.keySet()) {
-			System.out.println(elem);
+
 			priority1Sorted.add(elem);
 		}
 		Collections.sort(priority1Sorted);
-		
+
 		for (Integer elem : priority2Unsorted.keySet()) {
 			priority2Sorted.add(elem);
 		}
